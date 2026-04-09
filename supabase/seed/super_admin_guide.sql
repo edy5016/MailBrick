@@ -8,6 +8,38 @@
 -- 4. Supabase > SQL Editor 에서 실행
 -- ============================================================
 
+
+
+  -- 1. 트리거 함수 임시 우회                                                                                         
+  CREATE OR REPLACE FUNCTION protect_role_change()                                                                    
+  RETURNS TRIGGER AS $$
+  BEGIN
+    RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+  -- 2. SUPER_ADMIN 설정
+  UPDATE public.profiles
+  SET role = 'SUPER_ADMIN'
+  WHERE email = 'gamut5016@gmail.com';
+
+  -- 3. 트리거 함수 원복 (auth.uid() NULL 허용 수정 포함)
+  CREATE OR REPLACE FUNCTION protect_role_change()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    IF NEW.role IS DISTINCT FROM OLD.role THEN
+      IF auth.uid() IS NOT NULL AND NOT is_super_admin() THEN
+        RAISE EXCEPTION 'role 변경 권한이 없습니다. SUPER_ADMIN만 변경 가능합니다.';
+      END IF;
+      IF NEW.id = auth.uid() THEN
+        RAISE EXCEPTION '자신의 role은 변경할 수 없습니다.';
+      END IF;
+    END IF;
+    RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+
 -- 방법 1: 이메일로 찾아 role 변경 (권장)
 UPDATE public.profiles
 SET role = 'SUPER_ADMIN'

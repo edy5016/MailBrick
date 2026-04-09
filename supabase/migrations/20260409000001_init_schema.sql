@@ -5,7 +5,20 @@
 -- ENUM 타입 정의
 CREATE TYPE user_role AS ENUM ('PENDING', 'ADMIN', 'SUPER_ADMIN');
 CREATE TYPE email_status AS ENUM ('PENDING', 'SENT', 'FAILED');
-CREATE TYPE event_type AS ENUM ('ORDER_COMPLETE', 'SHIPPING_START', 'INQUIRY_REPLY', 'MARKETING');
+CREATE TYPE event_type AS ENUM (
+  'SIGNUP',              -- 회원가입
+  'EMAIL_VERIFIED',      -- 이메일 인증 완료
+  'ORDER_COMPLETE',      -- 주문 완료
+  'PAYMENT_FAILED',      -- 결제 실패
+  'SHIPPING_START',      -- 배송 시작
+  'SHIPPING_COMPLETE',   -- 배송 완료
+  'REFUND_REQUEST',      -- 환불 요청
+  'REFUND_COMPLETE',     -- 환불 완료
+  'CART_ABANDONED',      -- 장바구니 이탈
+  'INQUIRY_CREATED',     -- 문의 생성
+  'INQUIRY_REPLY',       -- 문의 답변
+  'MARKETING'            -- 마케팅 발송
+);
 
 -- ============================================================
 -- 1. profiles 테이블

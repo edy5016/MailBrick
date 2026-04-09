@@ -21,7 +21,7 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 // 발신 이메일 주소 (Resend에서 도메인 인증 필요)
-const FROM_EMAIL = Deno.env.get('FROM_EMAIL') ?? 'noreply@mailbrick.io'
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') ?? 'gamut5016@mailbrick.io'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

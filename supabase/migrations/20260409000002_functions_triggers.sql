@@ -88,7 +88,8 @@ BEGIN
   -- role이 변경되는 경우에만 검사
   IF NEW.role IS DISTINCT FROM OLD.role THEN
     -- SUPER_ADMIN이 아닌 경우 role 변경 차단
-    IF NOT is_super_admin() THEN
+    -- auth.uid()가 NULL이면 서비스 롤(postgres/SQL Editor) 실행 → 허용
+    IF auth.uid() IS NOT NULL AND NOT is_super_admin() THEN
       RAISE EXCEPTION 'role 변경 권한이 없습니다. SUPER_ADMIN만 변경 가능합니다.';
     END IF;
 
